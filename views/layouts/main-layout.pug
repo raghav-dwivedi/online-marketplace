@@ -1,0 +1,68 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{pageTitle}
+        link(rel="stylesheet", href="/css/main.css")
+        block styles
+    body
+        .backdrop
+        header.main-header
+            button#side-menu-toggle Menu
+            nav.main-header__nav
+                ul.main-header__item-list
+                    li.main-header__item
+                        a(href="/", class=(path==='/' ? 'active' : '')) Shop
+                    li.main-header__item
+                        a(href="/products", class=(path==='/products' ? 'active' : '')) Products
+                    if (isAuthenticated)
+                        li.main-header__item
+                            a(href="/cart", class=(path==='/cart' ? 'active' : '')) Cart
+                        li.main-header__item
+                            a(href="/orders", class=(path==='/orders' ? 'active' : '')) Orders
+                        li.main-header__item
+                            a(href="/admin/add-product", class=(path==='/admin/add-product' ? 'active' : '')) Add Product
+                        li.main-header__item
+                            a(href="/admin/products", class=(path==='/admin/products' ? 'active' : '')) Admin Products
+                ul.main-header__item-list
+                    if (!isAuthenticated)
+                        li.main-header__item
+                            a(href="/login", class=(path==='/login' ? 'active' : '')) Login
+                        li.main-header__item
+                            a(href="/signup", class=(path==='/signup' ? 'active' : '')) Signup
+                    else
+                        li.main-header__item
+                            form(action="/logout", method="post")
+                                input(type="hidden", name="_csrf", value=csrfToken)
+                                button(type="submit") Logout 
+
+        nav.mobile-nav
+            ul.mobile-nav__item-list
+                li.mobile-nav__item
+                    a(href="/", class=(path==='/' ? 'active' : '')) Shop
+                li.mobile-nav__item
+                    a(href="/products", class=(path==='/products' ? 'active' : '')) Products
+                if (isAuthenticated)
+                    li.mobile-nav__item
+                        a(href="/cart", class=(path==='/cart' ? 'active' : '')) Cart
+                    li.mobile-nav__item
+                        a(href="/orders", class=(path==='/orders' ? 'active' : '')) Orders
+                    li.mobile-nav__item
+                        a(href="/admin/add-product", class=(path==='/admin/add-product' ? 'active' : '')) Add Product
+                    li.mobile-nav__item
+                        a(href="/admin/products", class=(path==='/admin/products' ? 'active' : '')) Admin Products
+
+                if (!isAuthenticated)
+                    li.mobile-nav__item
+                        a(href="/login", class=(path==='/login' ? 'active' : '')) Login
+                    li.mobile-nav__item
+                        a(href="/signup", class=(path==='/signup' ? 'active' : '')) Signup
+                else
+                    li.mobile-nav__item
+                        form(action="/logout", method="post")
+                            input(type="hidden",  name="_csrf", value=csrfToken)
+                            button(type="submit") Logout 
+        block content
+        script(src="/js/main.js") 

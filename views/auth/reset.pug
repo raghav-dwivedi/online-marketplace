@@ -1,0 +1,21 @@
+extends ../layouts/main-layout
+
+block styles
+    link(rel="stylesheet", href="/css/forms.css")
+    link(rel="stylesheet", href="/css/auth.css")
+
+block content
+    main
+        if (hasError)
+            .user-message.user-message--error #{validationErrors[0].msg}
+        form.login-form(action = "/reset", method="POST" novalidate)
+            .form-control
+                label(for="email") E-Mail
+                input(
+                    class=validationErrors.find(e => e.param === 'email') ? 'invalid' : '',
+                    type="email",
+                    name="email",
+                    value=preservedInput.email,
+                    )#email
+            input(type="hidden",  name="_csrf", value=csrfToken)
+            button.btn(type="submit") Reset Password

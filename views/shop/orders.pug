@@ -1,0 +1,16 @@
+extends ../layouts/main-layout
+
+block styles 
+    link(rel="stylesheet", href="/css/orders.css")
+block content 
+    if (orders.length > 0)
+        ul.orders
+            each order in orders
+                li.orders__item
+                    h1 Order - # #{order._id} - 
+                        a(href="/orders/" + order._id, target="_blank") Invoice 
+                    ul.orders__products 
+                        each p in order.products
+                            li.orders__products-item #{p.product.title} (#{p.quantity})
+    else 
+        h1 Nothing there!
