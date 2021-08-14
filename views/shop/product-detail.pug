@@ -4,7 +4,7 @@ block content
     main.centered 
         h1 #{product.title}
         hr
-        img.image(src=product.imageUrl, alt=product.title)
+        img.image(src='/' + product.imageUrl, alt=product.title)
         h2 #{product.price}
         p #{product.description}
         include ../includes/add-to-cart
