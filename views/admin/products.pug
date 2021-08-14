@@ -12,15 +12,15 @@ block content
                         header.card__header
                             h1.product__title #{product.title}
                         .card__image
-                            img(src=product.imageUrl, alt=product.title)
+                            img(src='/' + product.imageUrl, alt=product.title)
                         .card__content
-                            h2.product__price $#{product.price}
+                            h2.product__price ₹#{product.price}
                             p.product__description #{product.description}
                         .card__actions
                             a.btn(href="/admin/edit-product/" + product._id +"/?edit=true") Edit
                             input(type="hidden",  name="_csrf", value=csrfToken)
                             input(type="hidden", value=product._id, name="productId")
-                            button.btn(type="button", onclick="deleteProduct(this)") Delete 
+                            button.btn(type="button")#delete Delete 
         else
             h1 No Products
     script(src="/js/admin.js")

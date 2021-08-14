@@ -10,13 +10,13 @@ block content
                 li.cart__item 
                     h1 #{p.productId.title} 
                     h2 Quantity: #{p.quantity}
-                    h2 Price: $#{p.price}
+                    h2 Price: ₹#{p.price}
         div.centered
             h2 Total: #{totalSum}
             button.btn#order-btn ORDER
             script(src="https://js.stripe.com/v3/")
             script.
-                var stripe = Stripe('pk_test_51JIRBSSBbMnTWyeyAtBkvM0Ow8pW9RcHxE8J6Q0nDlINI5Zo9aOjG8CvJfC7FNgwDDTIwVwoVQ3WblawQCAZ4ws500t4zMF4RJ');
+                var stripe = Stripe('pk_test_51JIEHMSGI3OtiDZavnVG80Xjk11BaaQpfAKKROzlx8LRiQ7c7BPhxOWlScHaC3P9pdKgSgtrFAv0tOIei74QoWmu004zWQxSpy');
                 var orderBtn = document.getElementById('order-btn');
                 console.log('#{sessionId}');
                 orderBtn.addEventListener('click', function() {

@@ -1,5 +1,8 @@
 {
     "env": {
+        "AWS_ACCESS_KEY_ID": "AKIATOZKRWDGSL3J6IVR",
+        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_DEFAULT_REGION": "ap-south-1",
         "MONGO_USER": "raghav",
         "MONGO_PASSWORD": "IqVmtHF4WEcDKkOJ",
         "MONGO_DEFAULT_DATABASE": "shop",

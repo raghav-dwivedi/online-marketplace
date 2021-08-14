@@ -9,9 +9,15 @@ const MongoDBStore = require('connect-mongodb-session')(session);
 const csrf = require('csurf');
 const flash = require('connect-flash');
 const multer = require('multer');
+const multerS3 = require('multer-s3');
+const AWS = require('aws-sdk');
+const s3Proxy = require('s3-proxy');
 const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
+const crypto = require('crypto');
+
+let nonce = crypto.randomBytes(16).toString('base64');
 
 const errorController = require('./controllers/error');
 const User = require('./models/user');
@@ -28,15 +34,19 @@ const csrfProtection = csrf();
 // const privateKey = fs.readFileSync('server.key');
 // const certificate = fs.readFileSync('server.cert');
 
-const fileStorage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		fs.mkdirSync('images', {
-			recursive: true,
-		});
-		cb(null, 'images');
+const s3 = new AWS.S3({});
+// var s3express = express();
+
+const fileStorage = multerS3({
+	s3: s3,
+	bucket: 'online-marketplace-images',
+	metadata: (req, file, cb) => {
+		cb(null, { fieldname: file.fieldname });
 	},
-	filename: (req, file, cb) => {
-		cb(null, Date.now() + '-' + file.originalname);
+	key: (req, file, cb) => {
+		req.imageUrl =
+			'media/' + Date.now() + '.' + file.mimetype.split('/')[1];
+		cb(null, req.imageUrl);
 	},
 });
 
@@ -46,6 +56,7 @@ const fileFilter = (req, file, cb) => {
 		file.mimetype === 'image/jpg' ||
 		file.mimetype === 'image/jpeg'
 	) {
+		console.log(file);
 		cb(null, true);
 	} else {
 		cb(null, false);
@@ -64,7 +75,24 @@ const accessLogStream = fs.createWriteStream(
 	{ flags: 'a' }
 );
 
-app.use(helmet());
+app.use((req, res, next) => {
+	res.locals.cspNonce = crypto.randomBytes(16).toString('hex');
+	next();
+});
+
+app.use(
+	helmet.contentSecurityPolicy({
+		useDefaults: true,
+		directives: {
+			'script-src': [
+				"'self'",
+				"'unsafe-inline'",
+				'https://js.stripe.com/v3/',
+			],
+			'frame-src': ["'self'", 'https://js.stripe.com/v3/'],
+		},
+	})
+);
 app.use(compression());
 app.use(morgan('combined', { stream: accessLogStream }));
 
@@ -73,12 +101,14 @@ app.use(
 		extended: false,
 	})
 );
+
 app.use(
 	multer({
 		storage: fileStorage,
 		fileFilter: fileFilter,
 	}).single('image')
 ); // because parameter name is image in the view
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'images')));
 app.use(
@@ -115,6 +145,18 @@ app.use((req, res, next) => {
 	res.locals.csrfToken = req.csrfToken();
 	next();
 });
+
+app.get(
+	'/media/*',
+	s3Proxy({
+		bucket: 'online-marketplace-images',
+		accessKeyId: `${process.env.AWS_ACCESS_KEY_ID}`,
+		secretAccessKey: `${process.env.AWS_SECRET_ACCESS_KEY}`,
+		overrideCacheControl: 'max-age=2592000',
+	})
+);
+
+// app.use('/images/', s3express);
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

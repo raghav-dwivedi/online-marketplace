@@ -11,7 +11,7 @@ block content
                     li.cart__item 
                         h1 #{p.productId.title} 
                         h2 Quantity: #{p.quantity}
-                        h2 Price: $#{p.price}
+                        h2 Price: ₹#{p.price}
                         form(action="/cart-delete-item", method="POST")
                             input(type="hidden", value=p.productId._id, name="productId")
                             input(type="hidden",  name="_csrf", value=csrfToken)

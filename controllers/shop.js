@@ -7,7 +7,7 @@ const PDFDocument = require('pdfkit');
 const Product = require('../models/product');
 const Order = require('../models/order');
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 4;
 
 exports.getProducts = (req, res, next) => {
 	const page = +req.query.page || 1; // + is added to make it an integer value
@@ -286,24 +286,14 @@ exports.getInvoice = (req, res, next) => {
 							' - ' +
 							prod.quantity +
 							' x ' +
-							'$' +
+							'Rs.' +
 							prod.product.price
 					);
 			});
 			pdfDoc.fontSize(20).text('--------------------------');
-			pdfDoc.text('Total Price: $' + totalPrice);
+			pdfDoc.text('Total Price: Rs.' + totalPrice);
 
 			pdfDoc.end();
-			// fs.readFile(invoicePath, (err, data) => {
-			//     if (err) {
-			//         return next(err);
-			//     }
-			//     res.setHeader('Content-Type', 'application/pdf');
-			//     res.setHeader('Content-Disposition', 'attachment; filename="' + invoiceName + '"');
-			//     res.setHeader('Content-Disposition', 'inline');
-			//     res.send(data);
-			// });
-			// const file = fs.createReadStream(invoicePath);
 		})
 		.catch((err) => next(err));
 };
