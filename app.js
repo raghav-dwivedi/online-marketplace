@@ -35,7 +35,6 @@ const csrfProtection = csrf();
 // const certificate = fs.readFileSync('server.cert');
 
 const s3 = new AWS.S3({});
-// var s3express = express();
 
 const fileStorage = multerS3({
 	s3: s3,
@@ -47,6 +46,9 @@ const fileStorage = multerS3({
 		req.imageUrl =
 			'media/' + Date.now() + '.' + file.mimetype.split('/')[1];
 		cb(null, req.imageUrl);
+	},
+	limits: {
+		fileSize: 2 * 1024 * 1024,
 	},
 });
 
@@ -90,6 +92,7 @@ app.use(
 				'https://js.stripe.com/v3/',
 			],
 			'frame-src': ["'self'", 'https://js.stripe.com/v3/'],
+			'script-src-attr': "'unsafe-inline'",
 		},
 	})
 );
@@ -110,10 +113,10 @@ app.use(
 ); // because parameter name is image in the view
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'images')));
+
 app.use(
 	session({
-		secret: 'my secret',
+		secret: `${process.env.SESSION_SECRET}`,
 		resave: false,
 		saveUninitialized: false,
 		store: store,
@@ -155,8 +158,6 @@ app.get(
 		overrideCacheControl: 'max-age=2592000',
 	})
 );
-
-// app.use('/images/', s3express);
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

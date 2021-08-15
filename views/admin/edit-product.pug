@@ -19,14 +19,6 @@ block content
                         name="title",
                         value= !hasError ? product.title : preservedInput.title
                         )#title
-                //- .form-control
-                //-     label(for="imageUrl") Image URL
-                //-     input(
-                //-         class=validationErrors.find(e => e.param === 'imageUrl') ? 'invalid' : '',
-                //-         type="text",
-                //-         name="imageUrl",
-                //-         value= !hasError ? product.imageUrl : preservedInput.imageUrl
-                //-         )#imageUrl
                 .form-control
                     label(for="image") Image
                     input(
@@ -60,14 +52,6 @@ block content
                         name="title", 
                         value=preservedInput.title
                         )#title
-                //- .form-control
-                //-     label(for="imageUrl") Image URL
-                //-     input(
-                //-         class=validationErrors.find(e => e.param === 'imageUrl') ? 'invalid' : '',
-                //-         type="text",
-                //-         name="imageUrl", 
-                //-         value=preservedInput.imageUrl
-                //-         )#imageUrl
                 .form-control
                     label(for="image") Image
                     input(
