@@ -60,6 +60,10 @@ router.post(
 			.trim(),
 		body('image').custom((value, { req }) => {
 			if (req.file.size > 2 * 1024 * 1024) {
+				fileHelper.deleteFile({
+					Bucket: 'online-marketplace-images',
+					Key: req.imageUrl,
+				});
 				throw new Error('Image size must be under 2 MB');
 			}
 			return true;
