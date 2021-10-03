@@ -205,7 +205,6 @@ exports.getProducts = (req, res, next) => {
 		// .select('title price -_id') // minus signifies exclude this field
 		// .populate('userId')
 		.then((products) => {
-			console.log(products);
 			res.render('admin/products', {
 				path: '/admin/products',
 				pageTitle: 'Admin Products',
