@@ -18,7 +18,6 @@ block content
             script.
                 var stripe = Stripe('pk_test_51JIEHMSGI3OtiDZavnVG80Xjk11BaaQpfAKKROzlx8LRiQ7c7BPhxOWlScHaC3P9pdKgSgtrFAv0tOIei74QoWmu004zWQxSpy');
                 var orderBtn = document.getElementById('order-btn');
-                console.log('#{sessionId}');
                 orderBtn.addEventListener('click', function() {
                     stripe.redirectToCheckout({
                         sessionId: '#{sessionId}'
