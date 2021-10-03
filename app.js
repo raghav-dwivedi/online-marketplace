@@ -58,7 +58,6 @@ const fileFilter = (req, file, cb) => {
 		file.mimetype === 'image/jpg' ||
 		file.mimetype === 'image/jpeg'
 	) {
-		console.log(file);
 		cb(null, true);
 	} else {
 		cb(null, false);
@@ -192,7 +191,7 @@ mongoose
 	.catch((err) => {
 		const error = new Error(err);
 		error.httpStatusCode = 500;
-		return next(error);
+		console.log(error);
 	});
 
 /*
